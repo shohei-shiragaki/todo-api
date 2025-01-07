@@ -29,7 +29,7 @@ todoList = [
 async def get_todo_all():
     return todoList
 
-@app.get("updateTodo/{id}")
+@app.get("/updateTodo/{id}")
 async def get_todo_by_id(id: str):
     todo = [todo for todo in todoList if todo["id"] == id]
     return todo[0]
