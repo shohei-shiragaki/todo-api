@@ -22,7 +22,11 @@ app = FastAPI()
 
 @app.get("/")
 async def index():
-    return{"message":"Success"}
+    return[
+        { "id": "test1", "title": "Todo 1", "detail": "Detail 1", "deadline": "2025-01-01", "status": "完了" },
+        { "id": "test2", "title": "Todo 2", "detail": "Detail 2", "deadline": "2025-01-15", "status": "未完了" },
+    ]
+
 
 # # Read
 # @app.get("/users", response_model=List[schemas.User])
