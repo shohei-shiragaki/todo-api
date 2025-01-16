@@ -22,14 +22,14 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      # - name: Set environment variables for development
-      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      #   run: |
-      #     echo "DEV_POSTGRES_USER=${{ secrets.DEV_POSTGRES_USER }}" >> $GITHUB_ENV
-      #     echo "DEV_POSTGRES_PASSWORD=${{ secrets.DEV_POSTGRES_PASSWORD }}" >> $GITHUB_ENV
-      #     echo "DEV_POSTGRES_DB=${{ secrets.DEV_POSTGRES_DB }}" >> $GITHUB_ENV
-      #     echo "DEV_POSTGRES_SERVER=${{ secrets.DEV_POSTGRES_SERVER }}" >> $GITHUB_ENV
-      #     echo "DEV_POSTGRES_PORT=${{ secrets.DEV_POSTGRES_PORT }}" >> $GITHUB_ENV
+      - name: Set environment variables for development
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          echo "DEV_POSTGRES_USER=${{ secrets.DEV_POSTGRES_USER }}" >> $GITHUB_ENV
+          echo "DEV_POSTGRES_PASSWORD=${{ secrets.DEV_POSTGRES_PASSWORD }}" >> $GITHUB_ENV
+          echo "DEV_POSTGRES_DB=${{ secrets.DEV_POSTGRES_DB }}" >> $GITHUB_ENV
+          echo "DEV_POSTGRES_SERVER=${{ secrets.DEV_POSTGRES_SERVER }}" >> $GITHUB_ENV
+          echo "DEV_POSTGRES_PORT=${{ secrets.DEV_POSTGRES_PORT }}" >> $GITHUB_ENV
 
       - name: Set environment variables for production
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
