@@ -45,7 +45,7 @@ class Settings(BaseSettings):
                     path=f"{values.data.get('DEV_POSTGRES_DB') or ''}",
                 ))
         elif values.data.get("ENVIRONMENT") == "production":
-            # 本番用（Neon posgres）
+            # 本番用（Neon　posgres）
             return str(PostgresDsn.build(
                     scheme="postgresql",
                     username=values.data.get("POSTGRES_USER"),
