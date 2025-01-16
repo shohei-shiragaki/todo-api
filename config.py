@@ -12,8 +12,8 @@ class AppEnvironment(str, enum.Enum):
 
 class Settings(BaseSettings):
     ENVIRONMENT: AppEnvironment
-    API_V1_STR: str = "/api/v1"
-    PROJECT_NAME: str = "TODO-API"
+    # API_V1_STR: str = "/api/v1"
+    # PROJECT_NAME: str = "TODO-API"
     # 開発環境用
     DEV_POSTGRES_USER: str
     DEV_POSTGRES_PASSWORD: str
