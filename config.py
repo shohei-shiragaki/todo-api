@@ -6,7 +6,7 @@ from pydantic_settings import BaseSettings
 
 
 class AppEnvironment(str, enum.Enum):
-    # ここで環境を指定する development or production
+    # ここで環境を指定する
     # ENVIRONMENT = "development"
     ENVIRONMENT = "production"
 
