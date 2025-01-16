@@ -1,0 +1,47 @@
+name: Alembic Migration
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  alembic-migrate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'  # 必要なPythonバージョンを指定
+
+      - name: Install dependencies
+        run: |
+          pip install alembic
+
+      - name: Set environment variables for development
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          echo "DEV_POSTGRES_USER=${{ secrets.DEV_POSTGRES_USER }}" >> $GITHUB_ENV
+          echo "DEV_POSTGRES_PASSWORD=${{ secrets.DEV_POSTGRES_PASSWORD }}" >> $GITHUB_ENV
+          echo "DEV_POSTGRES_DB=${{ secrets.DEV_POSTGRES_DB }}" >> $GITHUB_ENV
+          echo "DEV_POSTGRES_SERVER=${{ secrets.DEV_POSTGRES_SERVER }}" >> $GITHUB_ENV
+          echo "DEV_POSTGRES_PORT=${{ secrets.DEV_POSTGRES_PORT }}" >> $GITHUB_ENV
+
+      - name: Set environment variables for production
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          echo "ENVIRONMENT=production" >> $GITHUB_ENV
+          echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> $GITHUB_ENV
+          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> $GITHUB_ENV
+          echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> $GITHUB_ENV
+          echo "POSTGRES_SERVER=${{ secrets.POSTGRES_SERVER }}" >> $GITHUB_ENV
+          echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}" >> $GITHUB_ENV
+          echo "POSTGRES_SSLMODE=${{ secrets.POSTGRES_SSLMODE }}" >> $GITHUB_ENV
+
+      - name: Run Alembic Migrations
+        run: |
+          alembic upgrade head

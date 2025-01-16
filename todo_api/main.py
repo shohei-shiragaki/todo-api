@@ -1,41 +1,46 @@
 # from typing import List
-from fastapi import FastAPI
-# from fastapi import FastAPI,Depends
+
 # # from pydantic import BaseModel, Field
-# from sqlalchemy.orm import Session 
+from sqlalchemy.orm import Session 
 # from . import crud, models, schemas
+
+# from fastapi import FastAPI
+# from . import crud, models
 # from .databes  import SessionLocal,engine
+from fastapi import FastAPI,Depends,HTTPException
+from todo_api import crud, models, schemas
+from todo_api.databes import SessionLocal, engine
 
 # データベースエンジンをもとにデータベースを作成している
-# models.Base.metadata.create_all(bind=engine)
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# def get_db():
-#     db = SessionLocal()
-#     try:
-#         yield db
-#     finally:
-#         db.close()
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
-todoList = [
-        { "id": "test1", "title": "Todo 1", "detail": "Detail 1", "deadline": "2025-01-01", "status": "完了" },
-        { "id": "test2", "title": "Todo 2", "detail": "Detail 2", "deadline": "2025-01-15", "status": "未完了" },
-        { "id": "test3", "title": "Todo 3", "detail": "Detail 3", "deadline": "2025-01-23", "status": "未完了" },
-        { "id": "test4", "title": "Todo 4", "detail": "Detail 4", "deadline": "2025-02-23", "status": "完了" },
-    ]
-
-@app.get("/")
-async def get_todo_all():
-    return todoList
-
-@app.get("/updateTodo/{id}")
-async def get_todo_by_id(id: str):
-    todo = [todo for todo in todoList if todo["id"] == id]
-    return todo[0]
+@app.get("/", response_model=list[schemas.Todo])
+async def get_todo_all(db: Session = Depends(get_db)):
+    try:
+        todos = crud.get_todos(db)
+        return todos
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.get("/todos/{id}", response_model=schemas.Todo) 
+def get_read_todo(id: int, db: Session = Depends(get_db)): 
+    todo = crud.get_todo_by_id(db, id) 
+    return todo
 
+# @app.get("/updateTodo/{id}")
+# async def get_todo_by_id(id: str):
+#     todo = [todo for todo in todoList if todo["id"] == id]
+#     return todo[0]
 
 
 
