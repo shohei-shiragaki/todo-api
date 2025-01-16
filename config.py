@@ -52,6 +52,7 @@ class Settings(BaseSettings):
                     password=values.data.get("POSTGRES_PASSWORD"),
                     host=values.data.get("POSTGRES_SERVER"),
                     path=f"{values.data.get('POSTGRES_DB') or ''}",
+                    port=int(values.data.get("POSTGRES_PORT")),
                     query=f"sslmode={values.data.get('POSTGRES_SSLMODE')}"
                 ))
 
