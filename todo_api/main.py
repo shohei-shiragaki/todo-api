@@ -37,10 +37,12 @@ def get_read_todo(id: int, db: Session = Depends(get_db)):
     todo = crud.get_todo_by_id(db, id) 
     return todo
 
-# @app.get("/updateTodo/{id}")
-# async def get_todo_by_id(id: str):
-#     todo = [todo for todo in todoList if todo["id"] == id]
-#     return todo[0]
+@app.put("/todos/{id}", response_model=schemas.Todo)
+def update_todo(todo_id: int, todo_update: schemas.TodoUpdate, db: Session = Depends(get_db)):
+    db_todo = crud.update_todo(db, todo_id=todo_id, todo_update=todo_update)
+    if db_todo is None:
+        raise HTTPException(status_code=404, detail="Todo not found")
+    return db_todo
 
 
 

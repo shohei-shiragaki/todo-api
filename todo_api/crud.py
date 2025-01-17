@@ -1,5 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+from todo_api import schemas
 from . import models
 from fastapi import HTTPException
 
@@ -14,6 +15,16 @@ def get_todo_by_id(db: Session, todo_id: int):
     if todo is None: 
         raise HTTPException(status_code=404, detail="Todo not found") 
     return todo
+
+def update_todo(db: Session, todo_id: int, todo_update: schemas.TodoUpdate):
+    db_todo = db.query(models.Todo).filter(models.Todo.id == todo_id).first()
+    if db_todo is None:
+        return None
+    for key, value in todo_update.dict(exclude_unset=True).items():
+        setattr(db_todo, key, value)
+    db.commit()
+    db.refresh(db_todo)
+    return db_todo
 
 # # 予約一覧取得
 # def get_bookings(db:Session, skip:int = 0, limit: int = 100):
