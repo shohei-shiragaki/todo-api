@@ -1,5 +1,4 @@
 from logging.config import fileConfig
-import os
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from alembic import context
@@ -63,18 +62,9 @@ def run_migrations_online() -> None:
     In this scenario we need to create an Engine
     and associate a connection with the context.
 
-    """
-
-    # config.set_section_option("alembic", "DB_USER", os.environ.get("DB_USER"), "")
-    # config.set_section_option("alembic", "DB_PASSWORD", os.environ.get("DB_PASSWORD"), "")
-    # config.set_section_option("alembic", "POSTGRES_DB", os.environ.get("POSTGRES_DB"), "")
-    # config.set_section_option("alembic", "POSTGRES_SERVER", os.environ.get("POSTGRES_SERVER"), "")
-    # config.set_section_option("alembic", "POSTGRES_PORT", os.environ.get("POSTGRES_PORT"), "")
-    # config.set_section_option("alembic", "POSTGRES_SSLMODE", os.environ.get("POSTGRES_SSLMODE"), "")
-    
+    """    
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section),
-        # config.get_section(config.config_ini_section, {}),
+        config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
