@@ -65,12 +65,12 @@ def run_migrations_online() -> None:
 
     """
 
-    config.set_section_option("alembic", "DB_USER", os.environ.get("DB_USER"))
-    config.set_section_option("alembic", "DB_PASSWORD", os.environ.get("DB_PASSWORD"))
-    config.set_section_option("alembic", "POSTGRES_DB", os.environ.get("POSTGRES_DB"))
-    config.set_section_option("alembic", "POSTGRES_SERVER", os.environ.get("POSTGRES_SERVER"))
-    config.set_section_option("alembic", "POSTGRES_PORT", os.environ.get("POSTGRES_PORT"))
-    config.set_section_option("alembic", "POSTGRES_SSLMODE", os.environ.get("POSTGRES_SSLMODE"))
+    config.set_section_option("alembic", "DB_USER", os.environ.get("DB_USER"), "")
+    config.set_section_option("alembic", "DB_PASSWORD", os.environ.get("DB_PASSWORD"), "")
+    config.set_section_option("alembic", "POSTGRES_DB", os.environ.get("POSTGRES_DB"), "")
+    config.set_section_option("alembic", "POSTGRES_SERVER", os.environ.get("POSTGRES_SERVER"), "")
+    config.set_section_option("alembic", "POSTGRES_PORT", os.environ.get("POSTGRES_PORT"), "")
+    config.set_section_option("alembic", "POSTGRES_SSLMODE", os.environ.get("POSTGRES_SSLMODE"), "")
     
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
