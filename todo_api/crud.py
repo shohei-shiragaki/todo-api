@@ -29,8 +29,10 @@ def update_todo(db: Session, todo_id: int, todo_update: schemas.Todo):
 def create_todo(db: Session, todo: schemas.TodoCreate):
     db_todo = models.Todo(
         title=todo.title,
-        description=todo.description,
-        completed=todo.completed
+        detail=todo.detail,
+        deadline=todo.deadline,
+        status=todo.status,
+        create_date=todo.create_date,
     )
     db.add(db_todo)
     db.commit()
