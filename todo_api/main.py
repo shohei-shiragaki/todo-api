@@ -10,11 +10,26 @@ from sqlalchemy.orm import Session
 from fastapi import FastAPI,Depends,HTTPException
 from todo_api import crud, models, schemas
 from todo_api.databes import SessionLocal, engine
+from fastapi.middleware.cors import CORSMiddleware
 
 # データベースエンジンをもとにデータベースを作成している
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+# CORS設定の追加
+origins = [
+    "http://localhost:3000",  # フロントエンドのURL
+    "https://todo-api-aa9t.onrender.com"  # 必要に応じて他のオリジンを追加
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def get_db():
     db = SessionLocal()
