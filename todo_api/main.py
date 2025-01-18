@@ -64,12 +64,13 @@ def update_todo(todo_update: schemas.Todo, db: Session = Depends(get_db)):
 def create_todo(todo: schemas.TodoCreate, db: Session = Depends(get_db)):
     return crud.create_todo(db=db, todo=todo)
 
-@app.delete("/todo-delete", response_model=List[schemas.Todo])
+@app.post("/todo-delete", response_model=List[schemas.Todo])
 def delete_todos(todos: List[schemas.Todo], db: Session = Depends(get_db)):
     db_todos = crud.delete_todos(db, todos=todos)
     if db_todos is None:
         raise HTTPException(status_code=404, detail="Todos not found")
     return db_todos
+
 # # Read
 # @app.get("/users", response_model=List[schemas.User])
 # async def read_users(skip: int = 0,limit: int = 100,db:Session = Depends(get_db)):
