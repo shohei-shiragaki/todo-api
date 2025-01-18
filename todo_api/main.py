@@ -59,7 +59,7 @@ def update_todo(todo_update: schemas.Todo, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Todo not found")
     return db_todo
 
-@app.post("/todo-create/", response_model=schemas.Todo)
+@app.post("/todo-create", response_model=schemas.Todo)
 def create_todo(todo: schemas.TodoCreate, db: Session = Depends(get_db)):
     return crud.create_todo(db=db, todo=todo)
 
