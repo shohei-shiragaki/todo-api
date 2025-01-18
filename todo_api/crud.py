@@ -1,3 +1,4 @@
+from typing import List
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from todo_api import schemas
@@ -39,6 +40,15 @@ def create_todo(db: Session, todo: schemas.TodoCreate):
     db.refresh(db_todo)
     return db_todo
 
+def delete_todo(db: Session, todos: List[schemas.Todo]):
+    todo_ids = [todo.id for todo in todos]
+    db_todos = db.query(models.Todo).filter(models.Todo.id.in_(todo_ids)).all()
+    if not db_todos:
+        return None
+    for db_todo in db_todos:
+        db.delete(db_todo)
+    db.commit()
+    return db_todos
 # # 予約一覧取得
 # def get_bookings(db:Session, skip:int = 0, limit: int = 100):
 #     return db.query(models.Booking).offset(skip).limit(limit).all()
