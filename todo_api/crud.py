@@ -26,6 +26,17 @@ def update_todo(db: Session, todo_id: int, todo_update: schemas.Todo):
     db.refresh(db_todo)
     return db_todo
 
+def create_todo(db: Session, todo: schemas.TodoCreate):
+    db_todo = models.Todo(
+        title=todo.title,
+        description=todo.description,
+        completed=todo.completed
+    )
+    db.add(db_todo)
+    db.commit()
+    db.refresh(db_todo)
+    return db_todo
+
 # # 予約一覧取得
 # def get_bookings(db:Session, skip:int = 0, limit: int = 100):
 #     return db.query(models.Booking).offset(skip).limit(limit).all()
