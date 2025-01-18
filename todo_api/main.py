@@ -21,7 +21,8 @@ app = FastAPI()
 # CORS設定の追加
 origins = [
     "http://localhost:3000",  # フロントエンドのURL
-    "https://todo-api-aa9t.onrender.com"  # 必要に応じて他のオリジンを追加
+    "https://todo-app-nextjs-git-main-shiragaki-shoheis-projects.vercel.app",  # 必要に応じて他のオリジンを追加
+    "https://todo-app-nextjs-omega.vercel.app"  # 必要に応じて他のオリジンを追加
 ]
 
 app.add_middleware(

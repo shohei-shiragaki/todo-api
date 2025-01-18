@@ -11,7 +11,6 @@ def get_todos(db:Session, skip:int = 0, limit: int = 100):
 
 # todo_idをもとにTodoを取得
 def get_todo_by_id(db: Session, todo_id: int): 
-    # todo = db.query(models.Todo).filter(models.Todo.id == todo_id).first() 
     todo = db.scalar(select(models.Todo).where(models.Todo.id == todo_id))
     if todo is None: 
         raise HTTPException(status_code=404, detail="Todo not found") 
