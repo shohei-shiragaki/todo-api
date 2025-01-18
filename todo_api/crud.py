@@ -16,11 +16,11 @@ def get_todo_by_id(db: Session, todo_id: int):
         raise HTTPException(status_code=404, detail="Todo not found") 
     return todo
 
-def update_todo(db: Session, todo_id: int, todo_update: schemas.TodoUpdate):
+def update_todo(db: Session, todo_id: int, todo_update: schemas.Todo):
     db_todo = db.query(models.Todo).filter(models.Todo.id == todo_id).first()
     if db_todo is None:
         return None
-    for key, value in todo_update.dict(exclude_unset=True).items():
+    for key, value in todo_update.model_dump(exclude_unset=True).items():
         setattr(db_todo, key, value)
     db.commit()
     db.refresh(db_todo)
