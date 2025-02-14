@@ -1,16 +1,19 @@
 from typing import Optional
 from pydantic import BaseModel, Field
-import datetime
+from datetime import datetime, timezone
 
 class TodoCreate(BaseModel):
     title: str = Field(max_length=50)
     detail: Optional[str]= Field(max_length=200)
-    deadline: datetime.datetime
+    deadline: datetime
     status: bool
-    create_date: datetime.datetime
+    create_date: Optional[datetime] = None
 
     def validate_deadline(self):
-        if self.deadline <= datetime.datetime.now():
+        if not self.deadline.tzinfo:
+            self.deadline = self.deadline.replace(tzinfo=timezone.utc)
+        
+        if self.deadline <= datetime.now(timezone.utc):
             raise ValueError('締め切りは現在の日時より後でなければなりません')
 
 class Todo(TodoCreate):  # TodoCreateを継承している
