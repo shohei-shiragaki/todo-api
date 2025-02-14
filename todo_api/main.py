@@ -12,9 +12,9 @@ app = FastAPI()
 
 # CORS設定の追加
 origins = [
-    "http://localhost:3000",  # 開発環境
-    "https://todo-app-nextjs-git-main-shiragaki-shoheis-projects.vercel.app",  # 本番環境1
-    "https://todo-app-nextjs-omega.vercel.app"  # 本番環境2
+    "http://localhost:3000/",  # 開発環境
+    "https://todo-app-nextjs-git-main-shiragaki-shoheis-projects.vercel.app/",  # 本番環境1
+    "https://todo-app-nextjs-omega.vercel.app/"  # 本番環境2
 ]
 
 app.add_middleware(
