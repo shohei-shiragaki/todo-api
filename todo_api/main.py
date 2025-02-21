@@ -46,8 +46,8 @@ def get_read_todo(id: int, db: Session = Depends(get_db)):
     todo = crud.get_todo_by_id(db, id) 
     return todo
 
-@app.put("/todos/{id}", response_model=schemas.Todo)
-def update_todo(todo_update: schemas.Todo, db: Session = Depends(get_db)):
+@app.put("/todos/{id}", response_model=schemas.TodoUpdate)
+def update_todo(todo_update: schemas.TodoUpdate, db: Session = Depends(get_db)):
     todo = crud.update_todo(db, todo_id=todo_update.id, todo_update=todo_update)
     if todo is None:
         raise HTTPException(status_code=404, detail="Todo not found")
