@@ -32,6 +32,10 @@ def get_db():
     finally:
         db.close()
 
+@app.get("/persistent-effort", response_model=list[schemas.Todo])
+async def get_persistent_effort():
+    return []
+
 @app.get("/", response_model=list[schemas.Todo])
 async def get_todo_all(db: Session = Depends(get_db)):
     try:
