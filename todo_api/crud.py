@@ -18,6 +18,7 @@ def get_todo_by_id(db: Session, todo_id: int):
 
 def update_todo(db: Session, todo_id: int, todo_update: schemas.Todo):
     db_todo = db.query(models.Todo).filter(models.Todo.id == todo_id).first()
+    # 対象データがなければ404エラーにするのが一般的です
     if db_todo is None:
         return None
     for key, value in todo_update.model_dump(exclude_unset=True).items():
