@@ -12,6 +12,7 @@ app = FastAPI()
 
 # CORS設定の追加
 origins = [
+    # 環境ごとに違う値は環境変数で読ませましょう。
     "http://localhost:3000",  # 開発環境
     "https://todo-app-nextjs-git-main-shiragaki-shoheis-projects.vercel.app",  # 本番環境1
     "https://todo-app-nextjs-omega.vercel.app"  # 本番環境2
@@ -36,8 +37,15 @@ def get_db():
 async def get_persistent_effort():
     return []
 
+# REST APIの設計に基づいていないです。
+# ここは /todos になるべきです。
+# API設計をミスるとチームに迷惑がかかるのでREST APIの設計を学んで、遵守しましょう。
+# 世の中にたくさん資料があるので読んでみてください
+# 参考: https://learn.microsoft.com/ja-jp/azure/architecture/best-practices/api-design
 @app.get("/", response_model=list[schemas.Todo])
 async def get_todo_all(db: Session = Depends(get_db)):
+    # ここだけtry catchで囲んでいるのに、他の関数は囲んでいないので統一されていないです
+    # try-catchで囲むの方向で統一すると良いと思います。
     try:
         todos = crud.get_todos(db)
         return todos

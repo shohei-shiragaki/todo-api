@@ -1,3 +1,5 @@
+# READMEがないのでここに書きます。（READMEは必ず用意しましょう）
+# ローカルでDBはどうやって構築してます？DB用のDockerfileが見当たらず...（Slackなどで教えてください）
 FROM postgres:14
 
 # Time ZoneAc
