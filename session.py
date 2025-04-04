@@ -15,10 +15,9 @@ if settings.SQLALCHEMY_DATABASE_URI:
 
     if settings.ENVIRONMENT == "development":
         db_info = f"開発環境URI:{settings.SQLALCHEMY_DATABASE_URI}"
-        print(db_info)
+
     elif settings.ENVIRONMENT == "production":
         db_info = f"本番環境URI:{settings.SQLALCHEMY_DATABASE_URI}"
-        print(db_info)
 
 else:
     raise ValueError("SQLALCHEMY_DATABASE_URI is not set")

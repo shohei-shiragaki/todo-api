@@ -20,7 +20,7 @@ def update_todo(db: Session, todo_id: int, todo_update: schemas.Todo):
     db_todo = db.query(models.Todo).filter(models.Todo.id == todo_id).first()
     # 対象データがなければ404エラーにするのが一般的です
     if db_todo is None:
-        return None
+        raise HTTPException(status_code=404, detail="対象のTodoが見つかりません")
     for key, value in todo_update.model_dump(exclude_unset=True).items():
         setattr(db_todo, key, value)
     db.commit()

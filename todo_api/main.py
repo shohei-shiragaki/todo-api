@@ -2,7 +2,7 @@ from typing import List
 from sqlalchemy.orm import Session 
 from fastapi import FastAPI,Depends,HTTPException
 from todo_api import crud, models, schemas
-from todo_api.databes import SessionLocal, engine
+from todo_api.database import SessionLocal, engine
 from fastapi.middleware.cors import CORSMiddleware
 
 # データベースエンジンをもとにデータベースを作成している
@@ -37,15 +37,8 @@ def get_db():
 async def get_persistent_effort():
     return []
 
-# REST APIの設計に基づいていないです。
-# ここは /todos になるべきです。
-# API設計をミスるとチームに迷惑がかかるのでREST APIの設計を学んで、遵守しましょう。
-# 世の中にたくさん資料があるので読んでみてください
-# 参考: https://learn.microsoft.com/ja-jp/azure/architecture/best-practices/api-design
-@app.get("/", response_model=list[schemas.Todo])
+@app.get("/todos", response_model=list[schemas.Todo])
 async def get_todo_all(db: Session = Depends(get_db)):
-    # ここだけtry catchで囲んでいるのに、他の関数は囲んでいないので統一されていないです
-    # try-catchで囲むの方向で統一すると良いと思います。
     try:
         todos = crud.get_todos(db)
         return todos
@@ -55,19 +48,33 @@ async def get_todo_all(db: Session = Depends(get_db)):
 
 @app.get("/todos/{id}", response_model=schemas.Todo) 
 def get_read_todo(id: int, db: Session = Depends(get_db)): 
-    todo = crud.get_todo_by_id(db, id) 
-    return todo
+    try:
+        todo = crud.get_todo_by_id(db, id) 
+        if todo is None:
+            raise HTTPException(status_code=404, detail="Todo not found")
+        return todo
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.put("/todos/{id}", response_model=schemas.TodoUpdate)
 def update_todo(todo_update: schemas.TodoUpdate, db: Session = Depends(get_db)):
-    todo = crud.update_todo(db, todo_id=todo_update.id, todo_update=todo_update)
-    if todo is None:
-        raise HTTPException(status_code=404, detail="Todo not found")
-    return todo
+    try:
+        todo = crud.update_todo(db, todo_id=todo_update.id, todo_update=todo_update)
+        if todo is None:
+            raise HTTPException(status_code=404, detail="Todo not found")
+        return todo
+    except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/todo-create", response_model=schemas.Todo)
 def create_todo(todo: schemas.TodoCreate, db: Session = Depends(get_db)):
-    return crud.create_todo(db=db, todo=todo)
+    try:
+        db_todo = crud.create_todo(db=db, todo=todo)
+        if db_todo is None:
+            raise HTTPException(status_code=404, detail="Todo not found")
+        return todo
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/todo-delete", response_model=List[schemas.Todo])
 def delete_todos(todos: List[schemas.Todo], db: Session = Depends(get_db)):
