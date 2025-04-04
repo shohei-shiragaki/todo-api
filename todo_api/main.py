@@ -72,7 +72,7 @@ def create_todo(todo: schemas.TodoCreate, db: Session = Depends(get_db)):
         db_todo = crud.create_todo(db=db, todo=todo)
         if db_todo is None:
             raise HTTPException(status_code=404, detail="Todo not found")
-        return todo
+        return db_todo
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
