@@ -79,6 +79,6 @@ def create_todo(todo: schemas.TodoCreate, db: Session = Depends(get_db)):
 @app.post("/todo-delete", response_model=List[schemas.Todo])
 def delete_todos(todos: List[schemas.Todo], db: Session = Depends(get_db)):
     db_todos = crud.delete_todos(db, todos=todos)
-    if todos is None:
+    if db_todos is None:
         raise HTTPException(status_code=404, detail="Todos not found")
     return db_todos
