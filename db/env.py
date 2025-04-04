@@ -19,7 +19,7 @@ if config.config_file_name is not None:
 target_metadata = None
 
 # 本番環境用
-from todo_api.databes import Base
+from todo_api.database import Base
 target_metadata = Base.metadata
 
 # 開発環境用
