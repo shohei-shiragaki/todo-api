@@ -4,19 +4,26 @@ from fastapi import FastAPI,Depends,HTTPException
 from todo_api import crud, models, schemas
 from todo_api.database import SessionLocal, engine
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 # データベースエンジンをもとにデータベースを作成している
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+Environment = "production"  # 本番環境
+# Environment = "development"  # 開発環境
+
 # CORS設定の追加
 origins = [
-    # 環境ごとに違う値は環境変数で読ませましょう。
-    "http://localhost:3000",  # 開発環境
-    "https://todo-app-nextjs-git-main-shiragaki-shoheis-projects.vercel.app",  # 本番環境1
-    "https://todo-app-nextjs-omega.vercel.app"  # 本番環境2
+    os.getenv("PROD_URL")
+] if Environment == "production" else  [
+    os.getenv("DEV_URL")
 ]
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -78,7 +85,10 @@ def create_todo(todo: schemas.TodoCreate, db: Session = Depends(get_db)):
 
 @app.post("/todo-delete", response_model=List[schemas.Todo])
 def delete_todos(todos: List[schemas.Todo], db: Session = Depends(get_db)):
-    db_todos = crud.delete_todos(db, todos=todos)
-    if db_todos is None:
-        raise HTTPException(status_code=404, detail="Todos not found")
-    return db_todos
+    try:
+        db_todos = crud.delete_todos(db, todos=todos)
+        if db_todos is None:
+            raise HTTPException(status_code=404, detail="Todos not found")
+        return db_todos
+    except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
