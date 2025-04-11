@@ -14,8 +14,7 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-Environment = "production"  # 本番環境
-# Environment = "development"  # 開発環境
+Environment = os.getenv("Environment") 
 
 # CORS設定の追加
 origins = [
