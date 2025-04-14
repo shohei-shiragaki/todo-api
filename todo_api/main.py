@@ -14,8 +14,11 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+# なぜ先頭が大文字でしょうか、スネークケースで命名しましょう。こういうミスが多いと信用されなくなるので注意してください
 Environment = os.getenv("ENVIRONMENT") 
 
+# PROD_URLとDEV_URLでわけては環境変数のメリットがなくなります。
+# ORIGIN_URLという環境変数の名前にして、その中に各環境のURLを設定しましょう。
 # CORS設定の追加
 origins = [
     os.getenv("PROD_URL")
@@ -72,6 +75,7 @@ def update_todo(todo_update: schemas.TodoUpdate, db: Session = Depends(get_db)):
     except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
 
+# PUTの方が正しく設計できているのでこちらのPOSTとDELETEもエンドポイントを正しく設計してください。修正漏れやケアレスミスは周りから嫌がれるので自分自身で何度もチェックしましょう。
 @app.post("/todo-create", response_model=schemas.Todo)
 def create_todo(todo: schemas.TodoCreate, db: Session = Depends(get_db)):
     try:
