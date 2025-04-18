@@ -44,7 +44,7 @@ async def get_todo_all(db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/todos/{id}", response_model=schemas.Todo) 
+@app.get("/todo/{id}", response_model=schemas.Todo) 
 def get_read_todo(id: int, db: Session = Depends(get_db)): 
     try:
         todo = crud.get_todo_by_id(db, id) 
@@ -54,7 +54,7 @@ def get_read_todo(id: int, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.put("/todos/{id}", response_model=schemas.TodoUpdate)
+@app.put("/todo/{id}", response_model=schemas.TodoUpdate)
 def update_todo(todo_update: schemas.TodoUpdate, db: Session = Depends(get_db)):
     try:
         todo = crud.update_todo(db, todo_id=todo_update.id, todo_update=todo_update)
@@ -64,7 +64,7 @@ def update_todo(todo_update: schemas.TodoUpdate, db: Session = Depends(get_db)):
     except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/todos/create", response_model=schemas.Todo)
+@app.post("/todo/create", response_model=schemas.Todo)
 def create_todo(todo: schemas.TodoCreate, db: Session = Depends(get_db)):
     try:
         db_todo = crud.create_todo(db=db, todo=todo)
