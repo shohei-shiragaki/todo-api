@@ -32,7 +32,7 @@ class TodoDelete(BaseModel):
     id: int
     title: str = Field(max_length=50)
     detail: Optional[str]= Field(max_length=200)
-    deadline: datetime
+    deadline: Optional[datetime]
     status: bool
     create_date: Optional[datetime] = None
 
