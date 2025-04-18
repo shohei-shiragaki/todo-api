@@ -28,6 +28,13 @@ class TodoUpdate(BaseModel):
         if not self.deadline.tzinfo:
             self.deadline = self.deadline.replace(tzinfo=timezone.utc)
 
+class TodoDelete(BaseModel):
+    id: int
+    title: str = Field(max_length=50)
+    detail: Optional[str]= Field(max_length=200)
+    deadline: datetime
+    status: bool
+    create_date: Optional[datetime] = None
 
 class Todo(TodoCreate):  # TodoCreateを継承している
     id: int

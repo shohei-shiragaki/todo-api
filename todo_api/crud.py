@@ -40,7 +40,7 @@ def create_todo(db: Session, todo: schemas.TodoCreate):
     db.refresh(db_todo)
     return db_todo
 
-def delete_todos(db: Session, todos: List[schemas.Todo]):
+def delete_todos(db: Session, todos: List[schemas.TodoDelete]):
     todo_ids = [todo.id for todo in todos]
     db_todos = db.query(models.Todo).filter(models.Todo.id.in_(todo_ids)).all()
     if not db_todos:
