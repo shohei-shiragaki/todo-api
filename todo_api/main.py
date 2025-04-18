@@ -14,15 +14,11 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-Environment = os.getenv("ENVIRONMENT") 
+# 環境変数からORIGIN_URLSを取得し、カンマ区切りのリストとしてパース
+origin_urls = os.getenv("ORIGIN_URLS").split(",")
 
 # CORS設定の追加
-origins = [
-    os.getenv("PROD_URL")
-] if Environment == "production" else  [
-    os.getenv("DEV_URL")
-]
-
+origins = origin_urls
 
 app.add_middleware(
     CORSMiddleware,
@@ -38,10 +34,6 @@ def get_db():
         yield db
     finally:
         db.close()
-
-@app.get("/persistent-effort", response_model=list[schemas.Todo])
-async def get_persistent_effort():
-    return []
 
 @app.get("/todos", response_model=list[schemas.Todo])
 async def get_todo_all(db: Session = Depends(get_db)):
@@ -72,7 +64,7 @@ def update_todo(todo_update: schemas.TodoUpdate, db: Session = Depends(get_db)):
     except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/todo-create", response_model=schemas.Todo)
+@app.post("/todos/create", response_model=schemas.Todo)
 def create_todo(todo: schemas.TodoCreate, db: Session = Depends(get_db)):
     try:
         db_todo = crud.create_todo(db=db, todo=todo)
@@ -82,7 +74,7 @@ def create_todo(todo: schemas.TodoCreate, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/todo-delete", response_model=List[schemas.Todo])
+@app.post("/todos/delete", response_model=List[schemas.Todo])
 def delete_todos(todos: List[schemas.Todo], db: Session = Depends(get_db)):
     try:
         db_todos = crud.delete_todos(db, todos=todos)
