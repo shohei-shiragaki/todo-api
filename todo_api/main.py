@@ -74,8 +74,8 @@ def create_todo(todo: schemas.TodoCreate, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/todos/delete", response_model=List[schemas.Todo])
-def delete_todos(todos: List[schemas.Todo], db: Session = Depends(get_db)):
+@app.post("/todos/delete", response_model=List[schemas.TodoDelete])
+def delete_todos(todos: List[schemas.TodoDelete], db: Session = Depends(get_db)):
     try:
         db_todos = crud.delete_todos(db, todos=todos)
         if db_todos is None:
